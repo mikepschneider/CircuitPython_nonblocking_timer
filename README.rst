@@ -13,7 +13,10 @@ Introduction
     :target: https://travis-ci.org/mikepschneider/CircuitPython_nonblocking_timer
     :alt: Build Status
 
-.. todo:: Describe what the library does.
+This is a class to simplify the use of time.monotinic() when working with
+CircuitPython. It keeps track of the time interval bookkeeping so you can simply
+set a timer (or many), without using time.sleep(), and still respond to events
+when your timer(s) is/are sleeping.
 
 Dependencies
 =============
@@ -28,7 +31,8 @@ This is easily achieved by downloading
 Usage Example
 =============
 
-.. todo:: Add a quick, simple example. It and other examples should live in the examples folder and be included in docs/examples.rst.
+.. This is a class to simplify the use of time.monotinic() when working with
+   CircuitPython.
 
 Contributing
 ============
