@@ -1,6 +1,3 @@
-Introduction
-============
-
 .. image:: https://readthedocs.org/projects/circuitpython-nonblocking_timer/badge/?version=latest
     :target: https://circuitpython-nonblocking_timer.readthedocs.io/
     :alt: Documentation Status
@@ -13,7 +10,10 @@ Introduction
     :target: https://travis-ci.org/mikepschneider/CircuitPython_nonblocking_timer
     :alt: Build Status
 
-This is a class to simplify the use of time.monotinic() when working with
+Introduction
+============
+
+nonblockingtimer is a class to simplify the use of time.monotinic() when working with
 CircuitPython. It keeps track of the time interval bookkeeping so you can simply
 set a timer (or many), without using time.sleep(), and still respond to events
 when your timer(s) is/are sleeping.
