@@ -31,7 +31,7 @@ This is easily achieved by downloading
 Usage Example
 =============
 
-::
+.. code:: python
   class BlinkDemo(NonBlockingTimer):
       def __init__(self):
           super(BlinkDemo, self).__init__(0.1)
