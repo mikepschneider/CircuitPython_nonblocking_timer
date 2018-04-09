@@ -23,7 +23,33 @@
 `nonblocking_timer`
 ====================================================
 
-.. todo:: Describe what the module does
+.. This class allows easier usage of time.monotonic() to keep track of timers
+   without using time.sleep().
+
+   Example:
+
+
+class BlinkDemo(NonBlockingTimer):
+    def __init__(self):
+        super(BlinkDemo, self).__init__(0.1)
+        self.led = digitalio.DigitalInOut(board.D13)
+        self.led.direction = digitalio.Direction.OUTPUT
+        self.value = True
+
+    def stop(self):
+        self.led.value = False
+
+    def next(self):
+        if (super(BlinkDemo, self).next()):
+            self.led.value = not (self.led.value)
+
+blinkdemo.BlinkDemo()
+
+while True:
+  blinkDemo.next()
+  # This is the only place you should use time.sleep: to set the overall
+  # "sampling rate" of your program.
+  time.sleep(0.001)
 
 * Author(s): Michael Schneider
 """
@@ -37,48 +63,48 @@ __repo__ = "https://github.com/mikepschneider/CircuitPython_nonblocking_timer.gi
 import time
 
 class NonBlockingTimer:
-    _STOPPED = 0
-    _RUNNING = 1
+  _STOPPED = 0
+  _RUNNING = 1
 
-    def __init__(self, interval = -1):
-        """Create a new timer with optional interval. Initial state is STOPPED.
-           Call start() to set status to RUNNING. """
-        self._interval = interval
-        self._status = NonBlockingTimer._STOPPED
-        self._start_time = 0
+  def __init__(self, interval = -1):
+    """Create a new timer with optional interval. Initial state is STOPPED.
+       Call start() to set status to RUNNING. """
+    self._interval = interval
+    self._status = NonBlockingTimer._STOPPED
+    self._start_time = 0
 
-    def next(self):
-        """ Returns true or false according to the following algorithm:
+  def next(self):
+    """ Returns true or false according to the following algorithm:
 
-            if status == STOPPED return False
-            if time.monotic() - start_time > interval return True
-            else return False
-        """
+      if status == STOPPED return False
+      if time.monotic() - start_time > interval return True
+      else return False
+    """
 
-        if self._status != NonBlockingTimer.RUNNING:
-            return False
+    if self._status != NonBlockingTimer.RUNNING:
+      return False
 
-        current_time = time.monotonic()
-        elapsed = current_time - self._start_time
+    current_time = time.monotonic()
+    elapsed = current_time - self._start_time
 
-        if (elapsed > self._interval):
-            # The timer has been "triggered"
-            self._start_time = current_time
-            return True
-        return False
+    if (elapsed > self._interval):
+      # The timer has been "triggered"
+      self._start_time = current_time
+      return True
+    return False
 
-    def stop(self):
-        """Sets status to STOPPED. Do any cleanup here such as releasing pins,
-           etc. Call start() to restart."""
-        self._status = NonBlockingTimer.STOPPED
+  def stop(self):
+    """Sets status to STOPPED. Do any cleanup here such as releasing pins,
+       etc. Call start() to restart."""
+    self._status = NonBlockingTimer.STOPPED
 
-    def start(self):
-        """Sets status to RUNNING. Sets start_time to time.monontic(). Call
-           next() repeatedly to determine if the timer has been triggered. """
-        self._start_time = time.monotonic()
-        self._status = NonBlockingTimer.RUNNING
+  def start(self):
+    """Sets status to RUNNING. Sets start_time to time.monontic(). Call
+       next() repeatedly to determine if the timer has been triggered. """
+    self._start_time = time.monotonic()
+    self._status = NonBlockingTimer.RUNNING
 
-    def set_interval(self, seconds):
-        """ Set the trigger interval time in seconds (float). If seconds <= 0,
-            will raise an exception. """
-        self._interval = seconds
+  def set_interval(self, seconds):
+    """ Set the trigger interval time in seconds (float). If seconds <= 0,
+        will raise an exception. """
+    self._interval = seconds
