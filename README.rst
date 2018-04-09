@@ -32,30 +32,31 @@ Usage Example
 =============
 
 ..
-class BlinkDemo(NonBlockingTimer):
-    def __init__(self):
-        super(BlinkDemo, self).__init__(0.1)
-        self.led = digitalio.DigitalInOut(board.D13)
-        self.led.direction = digitalio.Direction.OUTPUT
-        self.value = True
+..class BlinkDemo(NonBlockingTimer):
+..    def __init__(self):
+..        super(BlinkDemo, self).__init__(0.1)
+..        self.led = digitalio.DigitalInOut(board.D13)
+..        self.led.direction = digitalio.Direction.OUTPUT
+..        self.value = True
+..
+..    def stop(self):
+..        self.led.value = False
+..
+..    def next(self):
+..        if (super(BlinkDemo, self).next()):
+..            self.led.value = not (self.led.value)
+..
+..
+..blinkdemo.BlinkDemo()
+..
+..while True:
+..  blinkDemo.next()
+..  # This is the only place you should use time.sleep: to set the overall
+..  # "sampling rate" of your program.
+..  time.sleep(0.001)
+..
 
-    def stop(self):
-        self.led.value = False
 
-    def next(self):
-        if (super(BlinkDemo, self).next()):
-            self.led.value = not (self.led.value)
-
-blinkdemo.BlinkDemo()
-
-while True:
-  blinkDemo.next()
-  # This is the only place you should use time.sleep: to set the overall
-  # "sampling rate" of your program.
-  time.sleep(0.001)
-
-
-  
 Contributing
 ============
 
