@@ -57,18 +57,20 @@ while True:
 # imports
 
 __version__ = "0.0.0-auto.0"
-__repo__ = "https://github.com/mikepschneider/CircuitPython_nonblocking_timer.git"
+__repo__ = \
+  "https://github.com/mikepschneider/CircuitPython_nonblocking_timer.git"
 
 
 import time
 
-class NonBlockingTimer:
+class NonBlockingTimer(object):
+  """ Non blocking timer class for use with CircuitPython """
   _STOPPED = 0
   _RUNNING = 1
 
-  def __init__(self, interval = -1):
-    """Create a new timer with optional interval. Initial state is STOPPED.
-       Call start() to set status to RUNNING. """
+  def __init__(self, interval=-1):
+    """Create a new timer with optional interval. Initial state is _STOPPED.
+       Call start() to set status to _RUNNING. """
     self._interval = interval
     self._status = NonBlockingTimer._STOPPED
     self._start_time = 0
@@ -76,33 +78,33 @@ class NonBlockingTimer:
   def next(self):
     """ Returns true or false according to the following algorithm:
 
-      if status == STOPPED return False
-      if time.monotic() - start_time > interval return True
+      if status == _STOPPED return False
+      if time.monotonic() - start_time > interval return True
       else return False
     """
 
-    if self._status != NonBlockingTimer.RUNNING:
+    if self._status != NonBlockingTimer._RUNNING:
       return False
 
     current_time = time.monotonic()
     elapsed = current_time - self._start_time
 
-    if (elapsed > self._interval):
+    if elapsed > self._interval:
       # The timer has been "triggered"
       self._start_time = current_time
       return True
     return False
 
   def stop(self):
-    """Sets status to STOPPED. Do any cleanup here such as releasing pins,
+    """Sets status to _STOPPED. Do any cleanup here such as releasing pins,
        etc. Call start() to restart."""
-    self._status = NonBlockingTimer.STOPPED
+    self._status = NonBlockingTimer._STOPPED
 
   def start(self):
-    """Sets status to RUNNING. Sets start_time to time.monontic(). Call
+    """Sets status to _RUNNING. Sets start_time to time.monotonic(). Call
        next() repeatedly to determine if the timer has been triggered. """
     self._start_time = time.monotonic()
-    self._status = NonBlockingTimer.RUNNING
+    self._status = NonBlockingTimer._RUNNING
 
   def set_interval(self, seconds):
     """ Set the trigger interval time in seconds (float). If seconds <= 0,
