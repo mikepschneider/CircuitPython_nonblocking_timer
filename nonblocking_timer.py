@@ -80,14 +80,12 @@ class NonBlockingTimer(object):
     return self._status
 
   def next(self):
-    """ Returns true or false according to the following algorithm:
-
+    """Returns true or false according to the following algorithm:
       if interval <= 0 raise RuntimeError
       if status != RUNNING raise RuntimeError
       if time.monotonic() - start_time > interval
-        return True and set start_time = time.monotonic()
-      else return False
-    """
+      return True and set start_time = time.monotonic()
+      else return False """
 
     if self._interval <= 0:
       raise RuntimeError('Interval must be > 0')
