@@ -70,7 +70,7 @@ class NonBlockingTimer(object):
 
   def __init__(self, interval=-1):
     """Create a new timer with optional interval. Initial state is _STOPPED.
-       Call start() to set status to _RUNNING. """
+       Call start() to set status to RUNNING. """
     self._interval = interval
     self._status = NonBlockingTimer._STOPPED
     self._start_time = 0
@@ -83,7 +83,7 @@ class NonBlockingTimer(object):
     """ Returns true or false according to the following algorithm:
 
       if interval <= 0 raise RuntimeError
-      if status != _RUNNING raise RuntimeError
+      if status != RUNNING raise RuntimeError
       if time.monotonic() - start_time > interval
         return True and set start_time = time.monotonic()
       else return False
@@ -94,7 +94,7 @@ class NonBlockingTimer(object):
 
     if self._status != NonBlockingTimer._RUNNING:
       raise RuntimeError(
-          'Timer must be in state _RUNNING before calling next()')
+          'Timer must be in state RUNNING before calling next()')
 
     current_time = time.monotonic()
     elapsed = current_time - self._start_time
@@ -107,12 +107,12 @@ class NonBlockingTimer(object):
     return False
 
   def stop(self):
-    """Sets status to _STOPPED. Do any cleanup here such as releasing pins,
-       etc. Call start() to restart. Does not reset current time."""
+    """Sets status to STOPPED. Do any cleanup here such as releasing pins,
+       etc. Call start() to restart. Does not reset start_time."""
     self._status = NonBlockingTimer._STOPPED
 
   def start(self):
-    """Sets status to _RUNNING. Sets start_time to time.monotonic(). Call
+    """Sets status to RUNNING. Sets start_time to time.monotonic(). Call
        next() repeatedly to determine if the timer has been triggered.
        If interval <= 0 raise a RuntimeError """
     if self._interval <= 0:
