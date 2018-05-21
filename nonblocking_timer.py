@@ -23,25 +23,25 @@
 `nonblocking_timer`
 ====================================================
 
-.. This class allows easier usage of time.monotonic() to keep track of timers
-   without using time.sleep().
+.. This class allows easier usage of time.monotonic() in CircuitPython to keep
+   track of timers without using making a blocking call to time.sleep().
 
    Example:
 
 
-class BlinkDemo(NonBlockingTimer):
-    def __init__(self):
-        super(BlinkDemo, self).__init__(0.1)
-        self.led = digitalio.DigitalInOut(board.D13)
-        self.led.direction = digitalio.Direction.OUTPUT
-        self.value = True
+class BlinkDemo(nonblocking_timer):
+  def __init__(self):
+    super(BlinkDemo, self).__init__(0.1)
+    self.led = digitalio.DigitalInOut(board.D13)
+    self.led.direction = digitalio.Direction.OUTPUT
+    self.value = True
 
-    def stop(self):
-        self.led.value = False
+  def stop(self):
+    self.led.value = False
 
-    def next(self):
-        if (super(BlinkDemo, self).next()):
-            self.led.value = not (self.led.value)
+  def next(self):
+    if (super(BlinkDemo, self).next()):
+      self.led.value = not (self.led.value)
 
 blinkdemo.BlinkDemo()
 
@@ -65,8 +65,8 @@ import time
 
 class NonBlockingTimer(object):
   """ Non blocking timer class for use with CircuitPython """
-  _STOPPED = 0
-  _RUNNING = 1
+  _STOPPED = 'STOPPED'
+  _RUNNING = 'RUNNING'
 
   def __init__(self, interval=-1):
     """Create a new timer with optional interval. Initial state is _STOPPED.
@@ -75,38 +75,58 @@ class NonBlockingTimer(object):
     self._status = NonBlockingTimer._STOPPED
     self._start_time = 0
 
+  @property
+  def status(self):
+    return self._status
+
   def next(self):
     """ Returns true or false according to the following algorithm:
 
-      if status == _STOPPED return False
-      if time.monotonic() - start_time > interval return True
+      if interval <= 0 raise RuntimeError
+      if status != _RUNNING raise RuntimeError
+      if time.monotonic() - start_time > interval
+        return True and set start_time = time.monotonic()
       else return False
     """
 
+    if self._interval <= 0:
+      raise RuntimeError('Interval must be > 0')
+
     if self._status != NonBlockingTimer._RUNNING:
-      return False
+      raise RuntimeError(
+          'Timer must be in state _RUNNING before calling next()')
 
     current_time = time.monotonic()
     elapsed = current_time - self._start_time
 
-    if elapsed > self._interval:
+    if elapsed >= self._interval:
       # The timer has been "triggered"
       self._start_time = current_time
       return True
+
     return False
 
   def stop(self):
     """Sets status to _STOPPED. Do any cleanup here such as releasing pins,
-       etc. Call start() to restart."""
+       etc. Call start() to restart. Does not reset current time."""
     self._status = NonBlockingTimer._STOPPED
 
   def start(self):
     """Sets status to _RUNNING. Sets start_time to time.monotonic(). Call
-       next() repeatedly to determine if the timer has been triggered. """
+       next() repeatedly to determine if the timer has been triggered.
+       If interval <= 0 raise a RuntimeError """
+    if self._interval <= 0:
+      raise RuntimeError('Interval must be > 0')
+
     self._start_time = time.monotonic()
     self._status = NonBlockingTimer._RUNNING
 
   def set_interval(self, seconds):
-    """ Set the trigger interval time in seconds (float). If seconds <= 0,
-        will raise an exception. """
+    """ Set the trigger interval time in seconds (float). If interval <= 0
+        raise a RuntimeError """
+    if seconds <= 0:
+      raise RuntimeError('Interval must be > 0')
     self._interval = seconds
+
+  def get_interval(self):
+    return self._interval

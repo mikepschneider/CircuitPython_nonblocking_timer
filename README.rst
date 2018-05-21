@@ -13,7 +13,7 @@
 Introduction
 ============
 
-nonblockingtimer is a class to simplify the use of time.monotinic() when working with
+nonblockingtimer is a class to simplify the use of time.monotonic() when working with
 CircuitPython. It keeps track of the time interval bookkeeping so you can simply
 set a timer (or many), without using time.sleep(), and still respond to events
 when your timer(s) is/are sleeping.

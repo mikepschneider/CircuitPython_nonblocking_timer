@@ -28,5 +28,6 @@ install:
 script:
   - pylint nonblocking_timer.py
   - ([[ ! -d "examples" ]] || pylint --disable=missing-docstring,invalid-name,bad-whitespace examples/*.py)
+  - python -m unittest discover -p *_test.py
   - circuitpython-build-bundles --filename_prefix circuitpython-nonblocking_timer --library_location .
   - cd docs && sphinx-build -E -W -b html . _build/html
