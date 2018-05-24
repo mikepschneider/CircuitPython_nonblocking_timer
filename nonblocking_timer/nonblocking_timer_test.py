@@ -1,13 +1,15 @@
+"""Nonblockign timer tests"""
+
 import unittest
 from unittest.mock import patch
 import nonblocking_timer
 
-print ("HELLO")
-
 class NonBlockingTimerTestCase(unittest.TestCase):
+  """Nonblockign timer tests"""
 
   @patch('time.monotonic')
   def test_nonblocking_timer(self, monotonic):
+    """test it baby"""
     monotonic.return_value = 0
     timer = nonblocking_timer.NonBlockingTimer()
     self.assertIsInstance(timer, nonblocking_timer.NonBlockingTimer)
@@ -47,4 +49,4 @@ class NonBlockingTimerTestCase(unittest.TestCase):
     self.assertFalse(timer.next())
 
 if __name__ == '__main__':
-    unittest.main()
+  unittest.main()

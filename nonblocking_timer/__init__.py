@@ -77,6 +77,7 @@ class NonBlockingTimer(object):
 
   @property
   def status(self):
+    """Get Status"""
     return self._status
 
   def next(self):
@@ -127,4 +128,5 @@ class NonBlockingTimer(object):
     self._interval = seconds
 
   def get_interval(self):
+    """Get interval"""
     return self._interval
