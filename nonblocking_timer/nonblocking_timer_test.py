@@ -2,6 +2,7 @@ import unittest
 from unittest.mock import patch
 import nonblocking_timer
 
+print ("HELLO")
 
 class NonBlockingTimerTestCase(unittest.TestCase):
 
@@ -44,3 +45,6 @@ class NonBlockingTimerTestCase(unittest.TestCase):
     monotonic.return_value = 21
     self.assertTrue(timer.next())
     self.assertFalse(timer.next())
+
+if __name__ == '__main__':
+    unittest.main()
