@@ -26,7 +26,7 @@ install:
   - pip install pylint circuitpython-build-tools Sphinx sphinx-rtd-theme
 
 script:
-  # - pylint nonblocking_timer.py
+  - pylint nonblocking_timer
   # - ([[ ! -d "examples" ]] || pylint --disable=missing-docstring,invalid-name,bad-whitespace examples/*.py)
   - python -m unittest discover -p *_test.py
   - circuitpython-build-bundles --filename_prefix circuitpython-nonblocking_timer --library_location .
